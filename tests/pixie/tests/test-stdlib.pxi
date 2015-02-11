@@ -93,14 +93,52 @@
 (t/deftest test-penultimate
   (let [v [1 2 3 4 5]
         l '(1 2 3 4 5)
-        r (range 1 6)]
+        r (range 1 6)
+        res 4]
     (t/assert= (penultimate nil) nil)
     (t/assert= (penultimate []) nil)
     (t/assert= (penultimate (range 0 0)) nil)
-    (t/assert= (penultimate v) 4)
-    (t/assert= (penultimate l) 4)
-    (t/assert= (penultimate r) 4)
-    (t/assert= (penultimate [2]) nil)))
+    (t/assert= (penultimate (range 0 1)) nil)
+    (t/assert= (penultimate [5]) nil)
+    (t/assert= (penultimate [4 5]) res)
+    (t/assert= (penultimate [3 4 5]) res)
+    (t/assert= (penultimate v) res)
+    (t/assert= (penultimate l) res)
+    (t/assert= (penultimate r) res)))
+
+(t/deftest test-antepenultimate
+  (let [v [1 2 3 4 5]
+        l '(1 2 3 4 5)
+        r (range 1 6)
+        res 3]
+    (t/assert= (antepenultimate []) nil)
+    (t/assert= (antepenultimate nil) nil)
+    (t/assert= (antepenultimate (range 0 0)) nil)
+    (t/assert= (antepenultimate (range 0 1)) nil)
+    (t/assert= (antepenultimate (range 0 2)) nil)
+    (t/assert= (antepenultimate [4 5]) nil)
+    (t/assert= (antepenultimate [3 4 5]) res)
+    (t/assert= (antepenultimate v) res)
+    (t/assert= (antepenultimate l) res)
+    (t/assert= (antepenultimate r) res)))
+
+(t/deftest test-preantepenultimate
+  (let [v [1 2 3 4 5]
+        l '(1 2 3 4 5)
+        r (range 1 6)
+        res 2]
+    (t/assert= (preantepenultimate []) nil)
+    (t/assert= (preantepenultimate nil) nil)
+    (t/assert= (preantepenultimate (range 0 0)) nil)
+    (t/assert= (preantepenultimate (range 0 1)) nil)
+    (t/assert= (preantepenultimate (range 0 2)) nil)
+    (t/assert= (preantepenultimate (range 0 3)) nil)
+    (t/assert= (preantepenultimate [4 5]) nil)
+    (t/assert= (preantepenultimate [3 4 5]) nil)
+    (t/assert= (preantepenultimate [2 3 4 5]) res)
+    (t/assert= (preantepenultimate v) res)
+    (t/assert= (preantepenultimate l) res)
+    (t/assert= (preantepenultimate r) res)))
 
 (t/deftest test-empty?
   (t/assert= (empty? []) true)
@@ -310,5 +348,5 @@
   (defn baz [x y] (+ x y))
   ;; Back into the text namespace
   (in-ns :pixie.tests.test-stdlib)
-  (t/assert= (set (keys (ns-map 'foo))) 
+  (t/assert= (set (keys (ns-map 'foo)))
              #{'bar 'baz}))

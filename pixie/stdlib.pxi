@@ -839,11 +839,29 @@ If further arguments are passed, invokes the method named by symbol, passing the
       (seq res))))
 
 (defn penultimate
-  {:doc "Returns the second to last element of the collection, or nil if none."
+  {:doc "Returns the penultimate element from the collection, or nil if fewer than two."
    :signatures [[coll]]
    :added "0.1"}
   [coll]
-  (last (butlast coll) ))
+  (last (butlast coll)))
+
+(defn antepenultimate
+  {:doc "Returns the antepenultimate element from the collection, or nil if fewer than three."
+   :signatures [[coll]]
+   :added "0.1"}
+  [coll]
+  (cond
+   (nil? (seq coll)) nil
+   :else (penultimate (butlast coll))))
+
+(defn preantepenultimate
+  {:doc "Returns the preantepenultimate element from the collection, or nil if fewer than four."
+   :signatures [[coll]]
+   :added "0.1"}
+  [coll]
+  (cond
+   (nil? (seq coll)) nil
+   :else (antepenultimate (butlast coll))))
 
 (defn complement
   {:doc "Given a function, return a new function which takes the same arguments
